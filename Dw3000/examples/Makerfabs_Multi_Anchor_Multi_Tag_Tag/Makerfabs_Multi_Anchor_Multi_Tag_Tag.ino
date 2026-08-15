@@ -11,6 +11,16 @@ Board: esp32 2.0.16
 */
 #include "dw3000.h"
 
+#if defined(ARDUINO_ARCH_NRF52) && defined(NRF52840_XXAA)
+#define MAKERFABS_NRF52840_DISPLAY
+#include <Wire.h>
+#include "SSD1306Wire.h"
+
+static constexpr uint8_t OLED_SDA_PIN = 26;
+static constexpr uint8_t OLED_SCL_PIN = 27;
+static SSD1306Wire display(0x3C, OLED_SDA_PIN, OLED_SCL_PIN);
+#endif
+
 #define TAG_ID              0
 #define NET_PAN_ID          0xDECA
 #define MAX_ANCHORS         8
@@ -107,9 +117,34 @@ static inline void write_u16_le(uint8_t *data, uint16_t value)
     data[1] = (uint8_t)(value >> 8);
 }
 
+#ifdef MAKERFABS_NRF52840_DISPLAY
+static void init_display()
+{
+    Wire.setPins(OLED_SDA_PIN, OLED_SCL_PIN);
+    display.init();
+    display.flipScreenVertically();
+    display.clear();
+    display.setFont(ArialMT_Plain_10);
+
+    display.drawString(0, 0, "Makerfabs UWB");
+    char role[8] = {0};
+    snprintf(role, sizeof(role), "T%u", TAG_ID);
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.setFont(ArialMT_Plain_24);
+    display.drawString(64, 22, role);
+    display.drawString(65, 22, role);
+    display.setTextAlignment(TEXT_ALIGN_LEFT);
+    display.display();
+}
+#endif
+
 void setup()
 {
     UART_init();
+
+#ifdef MAKERFABS_NRF52840_DISPLAY
+    init_display();
+#endif
 
     tx_poll_msg[3] = (uint8_t)(NET_PAN_ID);
     tx_poll_msg[4] = (uint8_t)(NET_PAN_ID >> 8);

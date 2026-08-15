@@ -12,6 +12,41 @@ Board: esp32 2.0.16
 #include "dw3000.h"
 #include "SPI.h"
 
+#if defined(ARDUINO_ARCH_NRF52) && defined(NRF52840_XXAA)
+#define MAKERFABS_NRF52840_DISPLAY
+#include <Wire.h>
+#include "SSD1306Wire.h"
+
+static constexpr uint8_t OLED_SDA_PIN = 26;
+static constexpr uint8_t OLED_SCL_PIN = 27;
+static SSD1306Wire display(0x3C, OLED_SDA_PIN, OLED_SCL_PIN);
+
+static void init_display()
+{
+  Wire.setPins(OLED_SDA_PIN, OLED_SCL_PIN);
+  display.init();
+  display.flipScreenVertically();
+  display.clear();
+  display.setFont(ArialMT_Plain_10);
+  display.drawString(0, 0, "Makerfabs Range RX");
+  display.drawString(0, 20, "Waiting...");
+  display.display();
+}
+
+static void show_distance(double distance_m)
+{
+  char distance_text[24] = {0};
+  snprintf(distance_text, sizeof(distance_text), "%.2f m", distance_m);
+
+  display.clear();
+  display.setFont(ArialMT_Plain_10);
+  display.drawString(0, 0, "Distance");
+  display.setFont(ArialMT_Plain_16);
+  display.drawString(0, 20, distance_text);
+  display.display();
+}
+#endif
+
 extern SPISettings _fastSPI;
 
 #define PIN_RST DW3000_PIN_RST
@@ -58,6 +93,10 @@ extern dwt_txconfig_t txconfig_options;
 void setup()
 {
   UART_init();
+
+#ifdef MAKERFABS_NRF52840_DISPLAY
+  init_display();
+#endif
 
   _fastSPI = SPISettings(7000000L, MSBFIRST, SPI_MODE0);
 
@@ -174,7 +213,11 @@ void loop()
         tof = ((rtd_init - rtd_resp * (1 - clockOffsetRatio)) / 2.0) * DWT_TIME_UNITS;
         distance = tof * SPEED_OF_LIGHT;
 
-        /* Display computed distance on LCD. */
+#ifdef MAKERFABS_NRF52840_DISPLAY
+        show_distance(distance);
+#endif
+
+        /* Keep the distance on the existing serial diagnostic channel. */
         snprintf(dist_str, sizeof(dist_str), "DIST: %3.2f m", distance);
         test_run_info((unsigned char *)dist_str);
       }

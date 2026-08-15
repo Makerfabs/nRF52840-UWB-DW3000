@@ -12,6 +12,41 @@ Board: esp32 2.0.16
 #include "dw3000.h"
 #include "SPI.h"
 
+#if defined(ARDUINO_ARCH_NRF52) && defined(NRF52840_XXAA)
+#define MAKERFABS_NRF52840_DISPLAY
+#include <Wire.h>
+#include "SSD1306Wire.h"
+
+static constexpr uint8_t OLED_SDA_PIN = 26;
+static constexpr uint8_t OLED_SCL_PIN = 27;
+static SSD1306Wire display(0x3C, OLED_SDA_PIN, OLED_SCL_PIN);
+
+static void init_display()
+{
+  Wire.setPins(OLED_SDA_PIN, OLED_SCL_PIN);
+  display.init();
+  display.flipScreenVertically();
+  display.clear();
+  display.setFont(ArialMT_Plain_10);
+  display.drawString(0, 0, "Makerfabs Range TX");
+  display.drawString(0, 20, "Waiting poll...");
+  display.display();
+}
+
+static void show_response_count(uint32_t count)
+{
+  char count_text[24] = {0};
+  snprintf(count_text, sizeof(count_text), "Count: %lu", (unsigned long)count);
+
+  display.clear();
+  display.setFont(ArialMT_Plain_10);
+  display.drawString(0, 0, "Makerfabs Range TX");
+  display.drawString(0, 20, "Response sent");
+  display.drawString(0, 40, count_text);
+  display.display();
+}
+#endif
+
 extern SPISettings _fastSPI;
 
 #define PIN_RST DW3000_PIN_RST
@@ -51,12 +86,17 @@ static uint8_t rx_buffer[20];
 static uint32_t status_reg = 0;
 static uint64_t poll_rx_ts;
 static uint64_t resp_tx_ts;
+static uint32_t response_count = 0;
 
 extern dwt_txconfig_t txconfig_options;
 
 void setup()
 {
   UART_init();
+
+#ifdef MAKERFABS_NRF52840_DISPLAY
+  init_display();
+#endif
 
   _fastSPI = SPISettings(7000000L, MSBFIRST, SPI_MODE0);
 
@@ -172,6 +212,10 @@ void loop()
 
           /* Increment frame sequence number after transmission of the poll message (modulo 256). */
           frame_seq_nb++;
+          response_count++;
+#ifdef MAKERFABS_NRF52840_DISPLAY
+          show_response_count(response_count);
+#endif
         }
       }
     }
