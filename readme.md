@@ -8,6 +8,10 @@ Product Link ：[nRF52840 UWB DW3000]()
 
 Wiki Link : [nRF52840 UWB DW3000](https://wiki.makerfabs.com/nRF52840%20DW3000%20UWB.html)
 
+Usage : [one-anchor--one-tag](https://github.com/Makerfabs/nRF52840-UWB-DW3000#31-one-anchor--one-tag)
+
+[multi-anchor--multi-tag](https://github.com/Makerfabs/nRF52840-UWB-DW3000#32-multi-anchor--multi-tag)
+
 ## 2.Feature
 
 - Controller: nRF52840, 64 MHz Cortex-M4 with FPU, 1 MB Flash, 256 KB RAM.
