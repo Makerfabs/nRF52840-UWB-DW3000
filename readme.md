@@ -41,6 +41,8 @@ Download the DW3000 library in [GitHub](https://github.com/Makerfabs/nRF52840-UW
 
 - Upload the sketch to the board.
 
+![IMG20260815163745.jpg](https://wikiadmin.makerfabs.com/api/uploads/images/cc14952609cf4b759e9042f083e0eaab.jpg)
+
 - Prepare **another module** and connect it to the PC with a USB cable.
 
 - Click **File-->Examples-->DW3000-->Makerfabs_Range_RX**.
@@ -51,11 +53,7 @@ Download the DW3000 library in [GitHub](https://github.com/Makerfabs/nRF52840-UW
 
 - Upload the sketch to the board.
 
-- Open the serial monitor, it will print the distance.
-
-![QQ20260701-150229.png](https://wikiadmin.makerfabs.com/api/uploads/images/7785395a7bcd41268ff9c9f91350af59.png)
-
-![range.png](https://wikiadmin.makerfabs.com/api/uploads/images/6fd3413a63b247b4b0ae7a6fe1663262.png)
+![IMG20260815114207.jpg](https://wikiadmin.makerfabs.com/api/uploads/images/39c0a29ed8794070b237702b5281643c.jpg)
 
 
 ### 3.2 Multi Anchor + Multi Tag
