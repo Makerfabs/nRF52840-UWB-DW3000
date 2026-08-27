@@ -53,8 +53,7 @@ Download the DW3000 library in [GitHub](https://github.com/Makerfabs/nRF52840-UW
 
 - Upload the sketch to the board.
 
-![IMG20260815114207.jpg](https://wikiadmin.makerfabs.com/api/uploads/images/39c0a29ed8794070b237702b5281643c.jpg)
-
+![new.jpg](https://wikiadmin.makerfabs.com/api/uploads/images/6971ce9f8152452fb485e8828a67b155.jpg)
 
 ### 3.2 Multi Anchor + Multi Tag
 
