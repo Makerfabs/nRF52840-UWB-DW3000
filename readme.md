@@ -41,7 +41,7 @@ Download the DW3000 library in [GitHub](https://github.com/Makerfabs/nRF52840-UW
 
 - Upload the sketch to the board.
 
-![IMG20260815163745.jpg](https://wikiadmin.makerfabs.com/api/uploads/images/cc14952609cf4b759e9042f083e0eaab.jpg)
+![IMG20260815163745 (1).jpg](https://wikiadmin.makerfabs.com/api/uploads/images/71d613c43bb44753ac14816966844e50.jpg)
 
 - Prepare **another module** and connect it to the PC with a USB cable.
 
